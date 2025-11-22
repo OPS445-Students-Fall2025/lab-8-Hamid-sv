@@ -1,0 +1,145 @@
+---
+
+- name: Configure OPS445 VM
+
+  hosts: localhost
+
+  become: yes
+
+
+
+  vars:
+
+    seneca_id: "Ssamadivaghefi"           # New user to be created
+
+    seneca_hostname: "ssamadi"            # Your actual Seneca username
+
+    lab_dirs:
+
+      - lab1
+
+      - lab2
+
+      - lab3
+
+      - lab4
+
+      - lab5
+
+      - lab6
+
+      - lab7
+
+      - lab8
+
+
+
+  tasks:
+
+    - name: Update Apache to latest
+
+      apt:
+
+        name: apache2
+
+        state: latest
+
+        update_cache: yes
+
+
+
+    - name: Install repo tools (Ubuntu equivalent for EPEL requirement)
+
+      apt:
+
+        name: software-properties-common
+
+        state: present
+
+
+
+    - name: Remove tree package
+
+      apt:
+
+        name: tree
+
+        state: absent
+
+
+
+    - name: Set hostname to your Seneca username
+
+      hostname:
+
+        name: "{{ seneca_hostname }}"
+
+
+
+    - name: Create new Seneca user
+
+      user:
+
+        name: "{{ seneca_id }}"
+
+        state: present
+
+        groups: sudo
+
+        append: yes
+
+        create_home: yes
+
+        shell: /bin/bash
+
+
+
+    - name: Create .ssh directory for new user
+
+      file:
+
+        path: "/home/{{ seneca_id }}/.ssh"
+
+        state: directory
+
+        owner: "{{ seneca_id }}"
+
+        group: "{{ seneca_id }}"
+
+        mode: "0700"
+
+
+
+    - name: Copy authorized_keys from current user
+
+      copy:
+
+        src: "/home/hamid/.ssh/authorized_keys"
+
+        dest: "/home/{{ seneca_id }}/.ssh/authorized_keys"
+
+        remote_src: yes
+
+        owner: "{{ seneca_id }}"
+
+        group: "{{ seneca_id }}"
+
+        mode: "0600"
+
+
+
+    - name: Create OPS445 lab directories
+
+      file:
+
+        path: "/home/{{ seneca_id }}/ops445/{{ item }}"
+
+        state: directory
+
+        owner: "{{ seneca_id }}"
+
+        group: "{{ seneca_id }}"
+
+        mode: "0755"
+
+      loop: "{{ lab_dirs }}"

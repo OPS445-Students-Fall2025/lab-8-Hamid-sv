@@ -1,0 +1,40 @@
+
+PLAY [Configure OPS445 VM] *****************************************************
+
+TASK [Gathering Facts] *********************************************************
+ok: [localhost]
+
+TASK [Update Apache to latest] *************************************************
+ok: [localhost]
+
+TASK [Install repo tools (Ubuntu equivalent for EPEL requirement)] *************
+ok: [localhost]
+
+TASK [Remove tree package] *****************************************************
+changed: [localhost]
+
+TASK [Set hostname to your Seneca username] ************************************
+changed: [localhost]
+
+TASK [Create new Seneca user] **************************************************
+changed: [localhost]
+
+TASK [Create .ssh directory for new user] **************************************
+changed: [localhost]
+
+TASK [Copy authorized_keys from current user] **********************************
+changed: [localhost]
+
+TASK [Create OPS445 lab directories] *******************************************
+changed: [localhost] => (item=lab1)
+changed: [localhost] => (item=lab2)
+changed: [localhost] => (item=lab3)
+changed: [localhost] => (item=lab4)
+changed: [localhost] => (item=lab5)
+changed: [localhost] => (item=lab6)
+changed: [localhost] => (item=lab7)
+changed: [localhost] => (item=lab8)
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=9    changed=6    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+
